@@ -17,6 +17,10 @@ public class GlobalExceptionHandler implements ExceptionMapper<Exception> {
             return Response.status(Response.Status.NOT_FOUND).entity(exception.getMessage()).build();
         }
 
+        if (exception instanceof FollowerNotFoundException) {
+            return Response.status(Response.Status.CONFLICT).entity(exception.getMessage()).build();
+        }
+
         return Response.serverError().entity("Internal Server Error").build();
     }
 }
