@@ -20,7 +20,7 @@ public class PostResource {
     PostService postService;
 
     @POST
-    public Response savePost(@PathParam("userId") Long userId, CreatePostRequest postRequest) {
+    public Response createPost(@PathParam("userId") Long userId, CreatePostRequest postRequest) {
         Post post = postService.create(userId, postRequest);
         return Response.status(Response.Status.CREATED).entity(post).build();
     }
