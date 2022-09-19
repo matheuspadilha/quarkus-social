@@ -16,7 +16,7 @@ import java.util.Set;
 @AllArgsConstructor
 public class ResponseError {
     private String message;
-    private Collection<FieldError> erros;
+    private Collection<FieldError> errors;
 
     public static <T> ResponseError createFromValidation(Set<ConstraintViolation<T>> violations) {
         List<FieldError> errors = violations.stream().map(cv -> new FieldError(cv.getPropertyPath().toString(), cv.getMessage())).toList();
