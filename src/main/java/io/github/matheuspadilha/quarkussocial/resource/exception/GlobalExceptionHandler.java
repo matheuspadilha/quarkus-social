@@ -13,14 +13,18 @@ public class GlobalExceptionHandler implements ExceptionMapper<Exception> {
     }
 
     private Response mapExceptionToResponse(Exception exception) {
-        if (exception instanceof UserNotFoundException) {
-            return Response.status(Response.Status.NOT_FOUND).entity(exception.getMessage()).build();
+        Response response = Response.serverError().entity("Internal Server Error").build();
+
+        if ((exception instanceof UserNotFoundException)) {
+            response = Response.status(Response.Status.NOT_FOUND).entity(exception.getMessage()).build();
+        } else if ((exception instanceof FollowerAndUserConflictException)) {
+            response = Response.status(Response.Status.CONFLICT).entity(exception.getMessage()).build();
+        } else if ((exception instanceof PostForbiddenException)) {
+            response = Response.status(Response.Status.FORBIDDEN).entity(exception.getMessage()).build();
+        } else if ((exception instanceof PostBadRequestException)) {
+            response = Response.status(Response.Status.BAD_REQUEST).entity(exception.getMessage()).build();
         }
 
-        if (exception instanceof FollowerNotFoundException) {
-            return Response.status(Response.Status.CONFLICT).entity(exception.getMessage()).build();
-        }
-
-        return Response.serverError().entity("Internal Server Error").build();
+        return response;
     }
 }

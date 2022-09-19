@@ -4,6 +4,7 @@ import io.github.matheuspadilha.quarkussocial.domain.model.User;
 import io.github.matheuspadilha.quarkussocial.domain.repository.UserRepository;
 import io.github.matheuspadilha.quarkussocial.resource.dto.CreateUserRequest;
 import io.github.matheuspadilha.quarkussocial.resource.exception.UserNotFoundException;
+import io.github.matheuspadilha.quarkussocial.utils.Constants;
 import io.quarkus.hibernate.orm.panache.PanacheQuery;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -37,20 +38,22 @@ public class UserService {
 
     @Transactional
     public void delete(Long id) {
-        User user = findById(id);
+        User user = Optional.ofNullable(findById(id))
+                .orElseThrow(() -> new UserNotFoundException(Constants.USER_NOT_FOUND));
 
         repository.delete(user);
     }
 
     @Transactional
     public void update(Long id, CreateUserRequest userData) {
-        User user = findById(id);
+        User user = Optional.ofNullable(findById(id))
+                .orElseThrow(() -> new UserNotFoundException(Constants.USER_NOT_FOUND));
 
         user.setName(userData.getName());
         user.setAge(userData.getAge());
     }
 
     public User findById(Long id) {
-        return Optional.ofNullable(repository.findById(id)).orElseThrow(() -> new UserNotFoundException("User not found."));
+        return repository.findById(id);
     }
 }

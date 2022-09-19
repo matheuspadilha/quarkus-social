@@ -26,8 +26,8 @@ public class PostResource {
     }
 
     @GET
-    public Response listPosts(@PathParam("userId") Long userId) {
-        List<PostResponse> posts = postService.findAllByUser(userId);
+    public Response listPosts(@PathParam("userId") Long userId, @HeaderParam("followerId") Long followerId) {
+        List<PostResponse> posts = postService.findAllByUser(userId, followerId);
         return Response.ok(posts).build();
     }
 }
